@@ -40,7 +40,7 @@ rustup update
 To check which version of Rust you have type:
 
 ```
-rustc -- version
+rustc --version
 ```
 
 <hr>
@@ -67,8 +67,8 @@ This will create several files and folders for you automatically:
 
 #### `lib.rs` vs `main.rs`
 
-There are 2 main types of projects you can make in Rust. A library and not
-a library.
+There are 2 main types of projects you can make in Rust: a library and not
+a library. 
 
 If you are writing a <strong>library</strong>, it means you intend for your
 code to be used in someone else's application as a crate or module.
@@ -81,7 +81,7 @@ should have a `main` function that looks like this:
 
 ```rust
 fn main() {
-  /// your app code goes here
+  // your app code goes here
 }
 ```
 
@@ -94,7 +94,7 @@ Cargo is a tool that helps you develop Rust. It does several things:
 - Runs tasks: `cargo build` (compile your app), `cargo test` (test your app), `cargo run` (run your app)
 - Start a project: `cargo new`, `cargo init`
 
-Officially, Cargo is the package manager for Rust. This means that you can
+Cargo is also the package manager for Rust. This means that you can
 use Cargo to install and manage bits of other people's code.
 
 - A package in Rust is called a Crate.
@@ -137,16 +137,16 @@ There are a lot of types, but just to get you started:
 
 ## dealing with strings
 
-String in Rust are a lot more complicated than you might be used to if
+Strings in Rust are a lot more complicated than you might be used to if
 you are coming from another language, in particular, interpreted languages
 like Ruby or JavaScript. Here's some key points:
 
 #### `&str` and `String`
-- "my string" is not a `String`. it's a `str`. the difference between the a `String` and a
-  `str` is how they are allocated. don't worry about that right now.
+- "my string" is not a `String`. it's a `str`. the difference between a `String` and a
+  `str` is how they are allocated. Don't worry about that right now.
 - pretty much always use `str` with an `&`, as `&str`.
 - You can turn a `&str` into a `String` by using `to_string()` or `String::from()`. You want
-  to do this because String has a ton of awesome convenience methods.
+  to do this because `String` has a ton of awesome convenience methods.
 
 <hr>
 
@@ -157,7 +157,7 @@ like Ruby or JavaScript. Here's some key points:
 
 ```rust
 let realstring = String::from("hello ");
-let str1 = "world!"
+let str1 = "world!";
 let message = realstring.push_str(str1);
 ```
 
@@ -165,7 +165,7 @@ let message = realstring.push_str(str1);
 
 ```rust
 let str1 = "hello ";
-let str2 = "world!"
+let str2 = "world!";
 let message = format!("{}{}", str1, str2);
 ```
 
@@ -173,7 +173,7 @@ let message = format!("{}{}", str1, str2);
 
 ## characters
 
-- a `char` is a different type than a `str` or `String`. `char` is always single quotes.
+- a `char` is a different type than a `str` or `String`. `char` always uses single quotes.
 - to get a `String`'s `char`s you can call `chars()`
 - you might find that instead of `chars()` you really want `as_bytes()` but if you aren't sure
   don't sweat it rn
@@ -184,7 +184,7 @@ Example:
 let letters = String::from("ashley").chars();
 
 for l in letters {
-  /// do something cool with characters
+  // do something cool with characters
 }
 ```
 
@@ -193,8 +193,8 @@ for l in letters {
 
 ## macros
 
-Macros are an interesting part of Rust. You know something is a macro if it has
-a `!`. The least technical way to describe the cool thing about Macros is that they
+Macros are an interesting part of Rust. You know something is a macro if its name has
+a `!`. The least technical way to describe the cool thing about macros is that they
 kinda get compiled twice. Don't worry if that doesn't make any sense.
 
 - `println!` is the equivalent of `console.log` or `puts`. It prints printable things
@@ -205,8 +205,8 @@ println!("i get printed on the screen");
 println!("hello {}!", "world");
 ```
 
-- `format!` is also a macro. We talked about it before as a way to build `str`s out of
-  `str`s.
+- `format!` is also a macro. We talked about it before as a way to 
+  concatenate `str`s.
 
 ```rust
 format!("my dogs are named: {} and {}", "cheeto", "frito");
@@ -243,7 +243,7 @@ Rust has pattern matching and it's great!
 match animal {
   "cat" => "Meow",
   "dog" => "Woof",
-  _ => "<indeciperable>", /// trailing comma!
+  _ => "<indeciperable>", // trailing comma!
 }
 ```
 
@@ -268,13 +268,13 @@ fn greeting(name: Option<&str>) -> &str {
   let who = match name {
     Some(n) => n,
     None => "World",
-  }
+  };
   format!("Hello, {}!", who)
 }
 greeting(Some("ashley"));
-/// "Hello, ashley!"
+// "Hello, ashley!"
 greeting(None);
-/// "Hello, World!"
+// "Hello, World!"
 ```
 
 <hr>
@@ -282,13 +282,13 @@ greeting(None);
 ## the `Result` type
 
 `Result` is kind of like `Option` except instead of something or nothing, you
-expect something that is Ok(`Ok()`) or an error(`Err()`).
+expect something that is Ok (`Ok()`) or an error (`Err()`).
 
 To write the `Result` type, write the word `Result`, follow by angle brackets with
-a Type and an Error Type inside, e.g. `Result<u32, &'static str>`.
-For example:
+a Type and an Error Type inside, e.g. `Result<u32, &'static str>`. For example:
+
 ```rust
-fn parse_name(name: &str) -> Result<&str, &'static str> {
+fn parse_name(name: Option<&str>) -> Result<&str, &'static str> {
   match name {
     Some(n) => Ok(n),
     None => Err("You must provide a name."),
@@ -300,7 +300,7 @@ fn parse_name(name: &str) -> Result<&str, &'static str> {
 
 ## testing
 
-Rust has unit testing built in! You can write tests in their own file, or right
+Rust has unit testing built in! You can write tests in their own file or right
 inline with your code.
 
 To designate a test write `#[test]` above a code block with asserts:
@@ -310,15 +310,15 @@ fn say_hello(name: &str) -> &str {
   let who = match name {
     Some(n) => n,
     None => "World",
-  }
+  };
   format!("Hello, {}!", who)
 }
 
 #[test]
 fn it_should_say_hello() {
-  assert_eq!(say_hello(), "Hello, World!");
-  assert_ne!(say_hello("ashley"), "Hello, World!");
-  assert_eq!(say_hello("ashley"), "Hello, ashley!");
+  assert_eq!(say_hello(None), "Hello, World!");
+  assert_ne!(say_hello(Some("ashley")), "Hello, World!");
+  assert_eq!(say_hello(Some("ashley")), "Hello, ashley!");
 }
 ```
 
