@@ -1,0 +1,371 @@
+<DOCTYPE html>
+<html>
+  <head>
+    <title>a very brief intro to rust</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="public/skeleton.css" type="text/css" rel="stylesheet">
+    <link href="public/custom.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+![ferris](public/img/ferris.png)
+# uma breve introdução ao rust
+
+---
+class: middle, left
+
+## links
+
+- web: https://ashleygwilliams.github.io/a-very-brief-intro-to-rust/#1
+- github: https://github.com/ashleygwilliams/a-very-brief-intro-to-rust
+
+### PRs e issues são bem-vindas!
+
+feito por [@ag_dubs](https://twitter.com/ag_dubs) que é, no melhor caso, uma iniciante avançada em Rust
+---
+class: middle, left
+
+### Este guia é uma introdução à sintaxe do Rust. Conceitos serão descartados.
+
+### Conceitos são mais importantes, mas as vezes precisamos de um pequeno incentivo para chegar em um ponto onde conceito fazem sentido.
+
+### Este é o incentivo.
+
+---
+class: middle, left
+
+## instale o rust
+
+A melhor forma de fazer isso é com o [rustup](https://www.rustup.rs/). rustup é um
+gerenciador de versão para o Rust. Para instalar execute:
+
+```
+curl https://sh.rustup.rs -sSf | sh
+```
+
+Para manter o rust atualizado com a última versão estável, digite:
+
+```
+rustup update
+```
+
+Para checar qual versão do rust você tem digite:
+
+```
+rustc -- version
+```
+---
+class: middle, left
+
+## configurando o projeto
+
+Existem várias formas de configurar um projeto em Rust, porém esta é a mais simples.
+
+1. Crie um repositório no Github
+2. Clone o repositório
+3. `cd` para dentro do repositório
+4. Digite `cargo init .`
+  * Use `--bin` se você não estiver criando uma biblioteca
+
+Isso vai criar vários arquivos e pastas para você automaticamente:
+
+- `Cargo.toml`: metadata sobre o projeto e suas dependencias
+- `.gitignore`: ignore arquivos compilados pelo Rust
+- `src/lib.rs` or `src/main.rs`: seu código Rust
+
+---
+class: middle, left
+
+## configurando o projeto
+
+#### `lib.rs` vs `main.rs`
+
+Existem dois tipos principais de projetos que você pode criar em Rust: biblioteca
+uma não biblioteca.
+
+Se você estiver escrevendo uma <strong>biblioteca</strong>, significa que você
+intencionou seu código para ser usado na aplicação de outra pessoa como uma crate ou módulo.
+Se você quer fazer isso você deve usar `lib.rs`.
+
+Se você está escrevendo uma <strong>não biblioteca</strong>, significa que você
+deseja escrever código que compila em um binário que alguém possa executar. Se
+você quer fazer isso, você precisa usar o `main.rs`. Dentro do `main.rs` você
+deve ter uma função `main` que parece com isso:
+
+```rust
+fn main() {
+  // your app code goes here
+}
+```
+---
+class: middle, left
+
+## cargo
+
+Cargo é uma ferramenta que ajuda você a desenvolver em Rust. Ela possui várias funções:
+
+- Executar tarefas: `cargo build` (compila seu app), `cargo test` (testa seu app), `cargo run` (executa seu app)
+- Iniciar um projeto: `cargo new`, `cargo init`
+
+Cargo também é o gerenciador de pacotes do Rust. Isso significa que você pode
+usar o Cargo para instalar e gerenciar bits de código de outras pessoas.
+
+- Um pacote no Rust é chamado de Crate.
+- Você pode encontrar Crates em http://crates.io
+- Você lista as Crates que você usar no arquivo `Cargo.toml`
+- Seu app mantém o registro de quais crates você está usando no arquivo `Cargo.lock`
+
+---
+class: middle, left
+
+## storing values
+
+To get started using Rust you'll probably want to assign values so that
+you can use them. To do this in Rust:
+
+```
+let name = "ashley";
+let age = 30;
+```
+
+If you want to make a constant, you must specify a type:
+
+```
+const FAVENUM: u32 = 6;
+```
+---
+class: middle, left
+
+## types
+
+There are a lot of types, but just to get you started:
+
+- `u32`: unsigned 32-bit integer
+- `i32`: signed 32-bit integer
+- `String` and/or `&str`: more on these below
+- `bool`: a boolean
+
+---
+class: middle, left
+
+## dealing with strings
+
+Strings in Rust are a lot more complicated than you might be used to if
+you are coming from another language, in particular, interpreted languages
+like Ruby or JavaScript. Here's some key points:
+
+#### `&str` and `String`
+- "my string" is not a `String`. It's a `str`. the difference between a `String` and a
+  `str` is how they are allocated. Don't worry about that right now.
+- Pretty much always use `str` with an `&`, as `&str`.
+- You can turn a `&str` into a `String` by using `to_string()` or `String::from()`. You want
+  to do this because `String` has a ton of awesome convenience methods.
+
+---
+class: middle, left
+
+
+## concatenation
+
+- add a `&str` to a `String` using `push_str()`
+
+```rust
+let realstring = String::from("hello ");
+let str1 = "world!";
+let message = realstring.push_str(str1);
+```
+
+- add `&str`s using `format!`
+
+```rust
+let str1 = "hello ";
+let str2 = "world!";
+let message = format!("{}{}", str1, str2);
+```
+
+---
+class: middle, left
+
+## characters
+
+- a `char` is a different type than a `str` or `String`. `char` always uses single quotes.
+- to get a `String`'s `char`s you can call `chars()`
+- you might find that instead of `chars()` you really want `as_bytes()` but if you aren't sure
+  don't sweat it rn
+
+Example:
+
+```rust
+let letters = String::from("ashley").chars();
+
+for l in letters {
+  // do something cool with characters
+}
+```
+
+---
+class: middle, left
+
+## macros
+
+Macros are an interesting part of Rust. You know something is a macro if its name has
+a `!`. The least technical way to describe the cool thing about macros is that they
+kinda get compiled twice. Don't worry if that doesn't make any sense.
+
+- `println!` is the equivalent of `console.log` or `puts`. It prints printable things
+  to standard output, which is usually just the console.
+
+```rust
+println!("i get printed on the screen");
+println!("hello {}!", "world");
+```
+
+- `format!` is also a macro. We talked about it before as a way to
+  concatenate `str`s.
+
+```rust
+format!("my dogs are named: {} and {}", "cheeto", "frito");
+```
+---
+class: middle, left
+
+## function signatures
+
+```rust
+pub fn say_hello(name: &str) -> &str {
+  let message = format!("hello, {}!", name);
+  message
+}
+```
+
+- put `pub` at the beginning if you want the function to be accessible outside the file
+  as in a module or crate
+- the keyword `fn` is how we know it is a function
+- list parameters inside the parens in the style `parameter_name: Type`, separate by commas
+- use the `->` to say what type the function returns
+- return a value from the last line of a function by omitting the semicolon
+- return early in a function using the `return` keyword
+
+---
+class: middle, left
+
+## `match` syntax
+
+Rust has pattern matching and it's great!
+
+```rust
+match animal {
+  "cat" => "Meow",
+  "dog" => "Woof",
+  _ => "<indeciperable>", // trailing comma!
+}
+```
+
+- `_` is used as a catch-all for anything that doesn't match
+- `match` supports trailing commas, and it's best practice to use them :)
+
+---
+class: middle, left
+
+## the `Option` type
+
+Rust doesn't have `nil`/`null` so if you want to express that something might return
+something or nothing, you need to use the `Option` type.
+
+To write the `Option` type, write the word `Option`, followed by angle brackets with
+a Type inside, e.g. `Option<u32>`.
+
+For example, if a parameter is optional you'd write:
+
+```rust
+fn greeting(name: Option<&str>) -> &str {
+  let who = match name {
+    Some(n) => n,
+    None => "World",
+  };
+  format!("Hello, {}!", who)
+}
+greeting(Some("ashley"));
+// "Hello, ashley!"
+greeting(None);
+// "Hello, World!"
+```
+---
+class: middle, left
+
+## the `Result` type
+
+`Result` is kind of like `Option` except instead of something or nothing, you
+expect something that is Ok (`Ok()`) or an error (`Err()`).
+
+To write the `Result` type, write the word `Result`, follow by angle brackets with
+a Type and an Error Type inside, e.g. `Result<u32, &'static str>`.
+
+For example:
+
+```rust
+fn parse_name(name: Option<&str>) -> Result<&str, &'static str> {
+  match name {
+    Some(n) => Ok(n),
+    None => Err("You must provide a name."),
+  }
+}
+```
+---
+class: middle, left
+
+## testing
+
+Rust has unit testing built in! You can write tests in their own file or right
+inline with your code.
+
+To designate a test write `#[test]` above a code block with asserts:
+
+```rust
+fn say_hello(name: &str) -> &str {
+  let who = match name {
+    Some(n) => n,
+    None => "World",
+  };
+  format!("Hello, {}!", who)
+}
+
+#[test]
+fn it_should_say_hello() {
+  assert_eq!(say_hello(None), "Hello, World!");
+  assert_ne!(say_hello(Some("ashley")), "Hello, World!");
+  assert_eq!(say_hello(Some("ashley")), "Hello, ashley!");
+}
+```
+
+---
+class: middle, left
+
+## good resources
+
+- The Rust Docs, https://doc.rust-lang.org/
+- The Rust Book, https://doc.rust-lang.org/book/
+- into_rust Screencasts, http://intorust.com/
+- The Rust Play Ground, https://play.rust-lang.org/
+- Rust by Example, http://rustbyexample.com/
+- Rust on exercism.io, http://exercism.io/languages/rust
+- New Rustacean Podcast, http://www.newrustacean.com/
+
+---
+class: middle, center
+
+![ferris](public/img/ferris.png)
+
+# go forth and write some Rust!
+
+   </textarea>
+    <script src="public/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
